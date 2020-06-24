@@ -23,7 +23,7 @@ for book in db.session.query(Books).all()[0:1]:
     post = {'title': book.name,
             'status': 'publish',
             'content': book.description,
-            'tac-gia': 'Nguyen Nhat Anh, Nguyen Ngoc Tu',
+            'tac-gia': '7,8,9,10',
             'categories': '1,2,3'
             }
     print(post)
