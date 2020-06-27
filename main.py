@@ -4,7 +4,7 @@ import base64
 
 from truyenfulldb import TruyenFullDatabase
 from models import Categories, Chapters, Books
-
+from functions import get_chapter, get_category, get_book, get_author
 import logging
 
 user = 'test'
@@ -17,9 +17,11 @@ headers = {'Authorization': 'Basic ' + token.decode('utf-8')}
 db = TruyenFullDatabase(dbname=r'truyenfull.db')
 
 for book in db.session.query(Books).all()[0:1]:
-    # print(book.name)
-    # print(book.category, type(book.category))
-    # break
+    slug = book.slug
+    book_json = get_book(slug)
+    if book_json is None:
+        post_book(book)
+
     post = {'title': book.name,
             'status': 'publish',
             'content': book.description,
