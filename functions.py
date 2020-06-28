@@ -59,16 +59,29 @@ def get_chapter(slug):
         return None
 
 
-def post_book(book_json):
+def post_book(book_dict):
     post_book_url = url + '/posts'
-    r = requests.post(post_book_url, headers = headers, json = book_json)
+    r = requests.post(post_book_url, headers = headers, json = book_dict)
+    get_book.delete(book_dict['slug'])
     return json.loads(r.content.decode('utf-8'))
 
-def post_author(author_json):
+def post_chapter(chapter_dict):
+    post_chapter_url = url + '/chapters'
+    r = requests.post(post_chapter_url, headers = headers, json = chapter_dict)
+    get_chapter.delete(chapter_dict['slug'])
+    return json.loads(r.content.decode('utf-8'))
+
+def post_author(author_dict):
     post_author_url = url + '/tac-gia'
-    r = requests.post(post_author_url, headers = headers, json = author_json)
+    r = requests.post(post_author_url, headers = headers, json = author_dict)
+    get_author.delete(author_dict['slug'])
     return json.loads(r.content.decode('utf-8'))
 
+def post_category(category_dict):
+    post_category_url = url + '/categories'
+    r = requests.post(post_category_url, headers = headers, json = category_dict)
+    get_category.delete(category_dict['slug'])
+    return json.loads(r.content.decode('utf-8'))
 
 if __name__ == "__main__":
     pp.pprint(get_book("test-post-truyen"))
