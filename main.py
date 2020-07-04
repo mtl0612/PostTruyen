@@ -2,11 +2,11 @@ import pprint
 import logging
 from time import sleep
 from operator import attrgetter
-
+import os
 from truyenfulldb import TruyenFullDatabase
 from models import Categories, Chapters, Books
-from functions import get_chapter, get_category, get_book, get_author
-from functions import post_book, post_author, post_category, post_chapter
+from functions import get_chapter, get_category, get_book, get_author, get_image
+from functions import post_book, post_author, post_category, post_chapter, post_image
 
 from slugify import slugify
 from  natsort import natsorted
@@ -19,6 +19,9 @@ pp = pprint.PrettyPrinter(indent=4,depth=2)
 db = TruyenFullDatabase(dbname=r'D:\01_PycharmProjects\GetTruyen\gettruyen\database\truyenfull.db')
 
 slugattrgetter = attrgetter('slug')
+
+media_path = r"D:\01_PycharmProjects\GetTruyen\images"
+
 for book in db.session.query(Books).all():
     print("book.slug", book.slug)
     print("book.author", book.author)
@@ -54,6 +57,13 @@ for book in db.session.query(Books).all():
             book_status = "Đang cập nhật"
         else:
             book_status = "Hoàn thành"
+        #post feature image:
+        try:
+            media_id = get_image(book.slug)['id']
+        except TypeError:
+            media = {'file': open(os.path.join(media_path,f'{book.slug}.jpg'), 'rb'),
+                     'slug': book.slug}
+            media_id = post_image(media)['id']
         book_dict = {'title': book.name,
                 'status': 'publish',
                 'slug' : book.slug,
@@ -61,7 +71,8 @@ for book in db.session.query(Books).all():
                 'tac-gia': ','.join([str(x) for x in author_ids]),
                 'categories' : ','.join([str(x) for x in category_ids]),
                 'tw_multi_chap' : '1',
-                'tw_status' : book_status
+                'tw_status' : book_status,
+                'featured_media': media_id
                 }
         #pp.pprint(book_dict)
         book_json = post_book(book_dict)
