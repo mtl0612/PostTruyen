@@ -3,6 +3,7 @@ from models import Base
 
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData
+from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 
 import logging
@@ -28,7 +29,7 @@ class TruyenFullDatabase:
             db_path = os.path.join(os.path.dirname(__file__), dbname)
             engine_url = self.DB_ENGINE[dbtype].format(DB=db_path)
             logging.debug("engine_url is %s" %engine_url)
-            self.db_engine = create_engine(engine_url)
+            self.db_engine = create_engine(engine_url, connect_args={'check_same_thread':False}, echo=False)
             logging.debug(self.db_engine)
             self.metadata = MetaData()
             Session = sessionmaker(bind=self.db_engine)

@@ -1,0 +1,13 @@
+awesome-slugify==1.6.5
+certifi==2020.6.20
+chardet==3.0.4
+idna==2.9
+natsort==7.0.1
+regex==2020.6.8
+requests==2.24.0
+ring==0.7.3
+six==1.15.0
+SQLAlchemy==1.3.17
+Unidecode==0.4.21
+urllib3==1.25.9
+wirerope==0.3.0
